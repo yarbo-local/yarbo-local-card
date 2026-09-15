@@ -320,9 +320,10 @@ export const cardStyles = css`
   svg .plan-remaining {
     fill: none;
     stroke: var(--yl-muted);
-    stroke-width: 1.5px;
+    stroke-width: 1px;
     vector-effect: non-scaling-stroke;
-    stroke-dasharray: 3 4;
+    stroke-linejoin: round;
+    opacity: 0.35;
   }
   svg .route {
     fill: none;
@@ -332,6 +333,14 @@ export const cardStyles = css`
     stroke-dasharray: 8 5;
   }
   svg .obstacle {
+    fill: none;
+    stroke: var(--yl-nogo);
+    stroke-width: 4px;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  svg .obstacle-dot {
     fill: var(--yl-nogo);
   }
   svg .robot {

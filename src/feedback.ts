@@ -74,7 +74,38 @@ export function longestPath(data: unknown, depth = 0): Point[] {
   return best;
 }
 
-/** Every point in the payload, for obstacle strips. */
+/**
+ * Obstacles collected by the integration for the current plan run: a list of clusters,
+ * each a list of ``[x, y]`` pairs (or ``{x, y}`` objects) in the map frame.
+ */
+export function obstacleClusters(data: unknown): Point[][] {
+  if (!Array.isArray(data)) {
+    return [];
+  }
+  const clusters: Point[][] = [];
+  for (const raw of data) {
+    if (!Array.isArray(raw)) {
+      continue;
+    }
+    const points: Point[] = [];
+    for (const item of raw) {
+      if (Array.isArray(item) && typeof item[0] === "number" && typeof item[1] === "number") {
+        points.push([item[0], item[1]]);
+      } else {
+        const p = asPoint(item);
+        if (p) {
+          points.push(p);
+        }
+      }
+    }
+    if (points.length) {
+      clusters.push(points);
+    }
+  }
+  return clusters;
+}
+
+/** Every point in the payload. */
 export function allPoints(data: unknown, depth = 0, out: Point[] = []): Point[] {
   if (depth > 4 || !data || typeof data !== "object" || out.length > 5000) {
     return out;

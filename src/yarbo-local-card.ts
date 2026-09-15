@@ -11,7 +11,7 @@ import {
   mdiSleep,
 } from "@mdi/js";
 
-import { allPoints, longestPath, planOverlay } from "./feedback";
+import { longestPath, obstacleClusters, planOverlay } from "./feedback";
 import {
   applySimilarity,
   distanceToPolyline,
@@ -42,7 +42,7 @@ import type {
 import { fitView, metresPerPixel, pixelToDisplay, viewBox, zoomAt, type Size, type View } from "./view";
 import "./editor";
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const DEFAULT_HEIGHT = 440;
 const CUT_WIDTH_M = 0.55;
 const TAP_SLOP_PX = 6;
@@ -277,7 +277,13 @@ export class YarboLocalCard extends LitElement {
         });
       }
     } else if (event.type === "feedback") {
-      this._feedback = { ...this._feedback, [event.leaf]: event.data };
+      const next = { ...this._feedback };
+      if (event.data === null || event.data === undefined) {
+        delete next[event.leaf];
+      } else {
+        next[event.leaf] = event.data;
+      }
+      this._feedback = next;
     }
   }
 
@@ -583,7 +589,7 @@ export class YarboLocalCard extends LitElement {
       <g class=${mapDim ? "dim" : ""}>
         ${map.zones.filter((z) => z.closed).map((z) => this._renderZone(z))}
         ${map.zones.filter((z) => !z.closed).map((z) => this._renderZone(z))} ${this._renderDocks()}
-        ${this._renderFeedback()} ${this._renderTrail()} ${this._renderRobot(mpp)} ${this._renderLabels(mpp)}
+        ${this._renderFeedback(mpp)} ${this._renderTrail()} ${this._renderRobot(mpp)} ${this._renderLabels(mpp)}
       </g>
       ${this._renderPicks(mpp)}
     </svg>`;
@@ -645,7 +651,7 @@ export class YarboLocalCard extends LitElement {
     });
   }
 
-  private _renderFeedback() {
+  private _renderFeedback(mpp: number) {
     const parts: SVGTemplateResult[] = [];
     const plan = planOverlay(this._feedback.plan_feedback);
     for (const path of plan.remaining) {
@@ -658,8 +664,13 @@ export class YarboLocalCard extends LitElement {
     if (route.length >= 2) {
       parts.push(svg`<polyline class="route" points=${displayPoints(route)}></polyline>`);
     }
-    for (const [x, y] of allPoints(this._feedback.cloud_points_feedback)) {
-      parts.push(svg`<rect class="obstacle" x=${-x - 0.06} y=${-y - 0.06} width="0.12" height="0.12"></rect>`);
+    for (const cluster of obstacleClusters(this._feedback.obstacles)) {
+      if (cluster.length >= 2) {
+        parts.push(svg`<polyline class="obstacle" points=${displayPoints(cluster)}></polyline>`);
+      } else {
+        const [x, y] = cluster[0]!;
+        parts.push(svg`<circle class="obstacle-dot" cx=${-x} cy=${-y} r=${Math.max(0.08, 3 * mpp)}></circle>`);
+      }
     }
     return parts;
   }

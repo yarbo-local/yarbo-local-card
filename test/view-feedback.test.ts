@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allPoints, longestPath, planOverlay } from "../src/feedback";
+import { allPoints, longestPath, obstacleClusters, planOverlay } from "../src/feedback";
 import { fitView, pixelToDisplay, viewBox, zoomAt } from "../src/view";
 
 describe("view", () => {
@@ -44,5 +44,28 @@ describe("feedback overlays", () => {
       [1, 2],
       [3, 4],
     ]);
+  });
+});
+
+describe("obstacles", () => {
+  it("reads the integration's clusters of [x, y] pairs and the robot's {x, y} objects", () => {
+    expect(
+      obstacleClusters([
+        [
+          [0.73, -27.45],
+          [0.68, -27.53],
+        ],
+        [{ x: 1, y: 2 }],
+        "nope",
+        [],
+      ]),
+    ).toEqual([
+      [
+        [0.73, -27.45],
+        [0.68, -27.53],
+      ],
+      [[1, 2]],
+    ]);
+    expect(obstacleClusters(null)).toEqual([]);
   });
 });
