@@ -9,8 +9,8 @@ if (location.search.includes("dark")) {
 }
 
 const map = site as unknown as MapData;
-const area = map.zones.find((z) => z.name === "East Lawn") ?? map.zones.find((z) => z.family === "areas")!;
-const pathway = map.zones.find((z) => z.name === "east lawn pathway") ?? map.zones.find((z) => z.family === "pathways")!;
+const area = map.zones.find((z) => z.name === "west lawn") ?? map.zones.find((z) => z.family === "areas")!;
+const pathway = map.zones.find((z) => z.family === "pathways" && z.name === "west lawn") ?? map.zones.find((z) => z.family === "pathways")!;
 const route = [...pathway.points, ...area.points, ...[...pathway.points].reverse()];
 
 function* drive(): Generator<[number, number, number, boolean]> {
@@ -41,7 +41,7 @@ const hass: HomeAssistant = {
   connection: {
     async subscribeMessage<T>(callback: (event: T) => void): Promise<() => void> {
       const it = drive();
-      // Real plan progress and obstacle clusters recorded from the robot mowing East Lawn.
+      // Real plan progress and the obstacle log replayed from the robot mowing the west lawn.
       setTimeout(() => {
         callback({ type: "feedback", leaf: "plan_feedback", data: sample.plan_feedback } as StreamEvent as T);
         callback({ type: "feedback", leaf: "obstacles", data: sample.obstacles } as StreamEvent as T);

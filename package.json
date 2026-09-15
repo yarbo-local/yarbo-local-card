@@ -1,6 +1,6 @@
 {
   "name": "yarbo-local-card",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Home Assistant dashboard card for Yarbo Local: site map, live robot, trail and aerial background. LAN only.",
   "license": "MIT",
   "private": true,

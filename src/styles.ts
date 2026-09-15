@@ -343,6 +343,17 @@ export const cardStyles = css`
   svg .obstacle-dot {
     fill: var(--yl-nogo);
   }
+  svg .detection {
+    fill: color-mix(in srgb, var(--yl-path) 70%, transparent);
+    stroke: var(--yl-surface);
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
+  }
+  svg .detection.selected {
+    fill: var(--yl-path);
+    stroke: var(--yl-ink);
+    stroke-width: 2.5px;
+  }
   svg .obstacle-ring {
     fill: color-mix(in srgb, var(--yl-nogo) 22%, transparent);
     stroke: var(--yl-nogo);

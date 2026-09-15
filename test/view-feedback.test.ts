@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allPoints, longestPath, obstacleClusters, planOverlay } from "../src/feedback";
+import { allPoints, longestPath, obstacleClusters, obstacleLayer, planOverlay } from "../src/feedback";
 import { fitView, pixelToDisplay, viewBox, zoomAt } from "../src/view";
 
 describe("view", () => {
@@ -69,3 +69,21 @@ describe("obstacles", () => {
     expect(obstacleClusters(null)).toEqual([]);
   });
 });
+
+describe("obstacle log", () => {
+  it("reads a run with ultrasonic detections and barrier clusters", () => {
+    const layer = obstacleLayer({
+      id: "2-1789495163",
+      plan_name: "west lawn plan",
+      ended: null,
+      detections: [{ point: [13.39, -30.37], source: "ultrasonic_right", distance_m: 0.42, t: 1789497331, count: 2 }, { nope: 1 }],
+      barriers: [{ points: [[0.73, -27.45], [0.68, -27.53]], first_seen: 1 }],
+    });
+    expect(layer.active).toBe(true);
+    expect(layer.planName).toBe("west lawn plan");
+    expect(layer.detections).toEqual([{ point: [13.39, -30.37], source: "ultrasonic_right", distance_m: 0.42, t: 1789497331, count: 2 }]);
+    expect(layer.barriers).toEqual([[[0.73, -27.45], [0.68, -27.53]]]);
+    expect(obstacleLayer({ id: "x", ended: 5 }).active).toBe(false);
+  });
+});
+

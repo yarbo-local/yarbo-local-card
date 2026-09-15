@@ -5,13 +5,14 @@ import {
   mdiCrosshairsGps,
   mdiEraser,
   mdiFitToScreenOutline,
+  mdiAlertOctagonOutline,
   mdiImageEditOutline,
   mdiLanDisconnect,
   mdiSatelliteVariant,
   mdiSleep,
 } from "@mdi/js";
 
-import { longestPath, obstacleClusters, planOverlay } from "./feedback";
+import { longestPath, obstacleLayer, planOverlay, type ObstacleDetection } from "./feedback";
 import {
   applySimilarity,
   distanceToPolyline,
@@ -42,7 +43,7 @@ import type {
 import { fitView, metresPerPixel, pixelToDisplay, viewBox, zoomAt, type Size, type View } from "./view";
 import "./editor";
 
-const VERSION = "0.1.1";
+const VERSION = "0.2.0";
 const DEFAULT_HEIGHT = 440;
 const CUT_WIDTH_M = 0.55;
 const TAP_SLOP_PX = 6;
@@ -98,6 +99,7 @@ export class YarboLocalCard extends LitElement {
     _feedback: { state: true },
     _background: { state: true },
     _selected: { state: true },
+    _selectedObstacle: { state: true },
     _follow: { state: true },
     _align: { state: true },
     _error: { state: true },
@@ -114,6 +116,7 @@ export class YarboLocalCard extends LitElement {
   declare _feedback: Record<string, unknown>;
   declare _background?: Background | null;
   declare _selected?: ZoneData;
+  declare _selectedObstacle?: ObstacleDetection;
   declare _follow: boolean;
   declare _align?: AlignState;
   declare _error?: string;
@@ -386,6 +389,17 @@ export class YarboLocalCard extends LitElement {
     }
     const local: Point = [-display[0], -display[1]];
     const mpp = this._view ? metresPerPixel(this._view, this._size) : 0.05;
+    const detections = obstacleLayer(this._feedback.obstacles).detections;
+    const near = detections
+      .map((d) => ({ d, dist: Math.hypot(d.point[0] - local[0], d.point[1] - local[1]) }))
+      .filter((x) => x.dist < Math.max(0.4, 14 * mpp))
+      .sort((a, b) => a.dist - b.dist)[0];
+    if (near) {
+      this._selected = undefined;
+      this._selectedObstacle = near.d === this._selectedObstacle ? undefined : near.d;
+      return;
+    }
+    this._selectedObstacle = undefined;
     const zones = this._map?.zones ?? [];
     const line = zones.find((z) => !z.closed && distanceToPolyline(local, z.points) < 10 * mpp);
     const areas = zones.filter((z) => z.closed && pointInPolygon(local, z.points));
@@ -563,6 +577,9 @@ export class YarboLocalCard extends LitElement {
               >${live.awake === false ? icon(mdiSleep) : nothing}${ACTIVITY_LABEL[live.activity] ?? live.activity}</span
             >`
           : nothing}
+        ${this._obstacleCount() > 0
+          ? html`<span class="chip warn" title=${this._obstacleTitle()}>${icon(mdiAlertOctagonOutline)}${this._obstacleCount()}</span>`
+          : nothing}
         ${live?.battery != null
           ? html`<span class="chip ${live.battery < 20 ? "bad" : ""}"
               >${icon(live.charging ? mdiBatteryCharging : mdiBattery)}${live.battery}%</span
@@ -664,7 +681,17 @@ export class YarboLocalCard extends LitElement {
     if (route.length >= 2) {
       parts.push(svg`<polyline class="route" points=${displayPoints(route)}></polyline>`);
     }
-    for (const cluster of obstacleClusters(this._feedback.obstacles)) {
+    const obstacles = obstacleLayer(this._feedback.obstacles);
+    for (const d of obstacles.detections) {
+      const [x, y] = d.point;
+      const size = Math.max(0.35, 7 * mpp);
+      const selected = d === this._selectedObstacle;
+      parts.push(
+        svg`<rect class="detection ${selected ? "selected" : ""}" x=${-x - size / 2} y=${-y - size / 2} width=${size} height=${size}
+          transform="rotate(45 ${-x} ${-y})"></rect>`,
+      );
+    }
+    for (const cluster of obstacles.barriers) {
       // A ring that keeps a minimum on-screen size, so obstacles stay findable zoomed out.
       const cx = cluster.reduce((s, p) => s + p[0], 0) / cluster.length;
       const cy = cluster.reduce((s, p) => s + p[1], 0) / cluster.length;
@@ -771,7 +798,36 @@ export class YarboLocalCard extends LitElement {
     </div>`;
   }
 
+  private _obstacleCount(): number {
+    const layer = obstacleLayer(this._feedback.obstacles);
+    return layer.detections.length + layer.barriers.length;
+  }
+
+  private _obstacleTitle(): string {
+    const layer = obstacleLayer(this._feedback.obstacles);
+    const scope = layer.active ? "this run" : "the last run";
+    return `${layer.detections.length} ultrasonic and ${layer.barriers.length} mapped obstacles in ${scope}${layer.planName ? ` (${layer.planName})` : ""}`;
+  }
+
   private _renderInfo() {
+    const obstacle = this._selectedObstacle;
+    if (obstacle && !this._align) {
+      const sensor: Record<string, string> = {
+        ultrasonic_left: "Front-left ultrasonic",
+        ultrasonic_middle: "Middle ultrasonic",
+        ultrasonic_right: "Front-right ultrasonic",
+      };
+      const when = obstacle.t ? new Date(obstacle.t * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "";
+      return html`<div class="info">
+        <div><strong>Obstacle</strong></div>
+        <div class="muted">
+          ${sensor[obstacle.source] ?? obstacle.source}${obstacle.distance_m != null ? html` · closest ${obstacle.distance_m} m` : nothing}${when
+            ? html` · ${when}`
+            : nothing}${obstacle.count > 1 ? html` · ${obstacle.count} passes` : nothing}
+        </div>
+        <div class="muted">Position estimated from the robot and sensor direction</div>
+      </div>`;
+    }
     const zone = this._selected;
     if (!zone || this._align) {
       return nothing;

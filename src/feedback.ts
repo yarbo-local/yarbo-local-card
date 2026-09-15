@@ -74,35 +74,80 @@ export function longestPath(data: unknown, depth = 0): Point[] {
   return best;
 }
 
-/**
- * Obstacles collected by the integration for the current plan run: a list of clusters,
- * each a list of ``[x, y]`` pairs (or ``{x, y}`` objects) in the map frame.
- */
-export function obstacleClusters(data: unknown): Point[][] {
-  if (!Array.isArray(data)) {
+export interface ObstacleDetection {
+  point: Point;
+  source: string;
+  distance_m: number | null;
+  t: number | null;
+  count: number;
+}
+
+export interface ObstacleLayer {
+  runId: string | null;
+  planName: string | null;
+  active: boolean;
+  barriers: Point[][];
+  detections: ObstacleDetection[];
+}
+
+function asPair(item: unknown): Point | null {
+  if (Array.isArray(item) && typeof item[0] === "number" && typeof item[1] === "number") {
+    return [item[0], item[1]];
+  }
+  return asPoint(item);
+}
+
+function clusterPoints(raw: unknown): Point[] {
+  const items = Array.isArray(raw) ? raw : (raw as { points?: unknown } | null)?.points;
+  if (!Array.isArray(items)) {
     return [];
   }
-  const clusters: Point[][] = [];
-  for (const raw of data) {
-    if (!Array.isArray(raw)) {
-      continue;
-    }
-    const points: Point[] = [];
-    for (const item of raw) {
-      if (Array.isArray(item) && typeof item[0] === "number" && typeof item[1] === "number") {
-        points.push([item[0], item[1]]);
-      } else {
-        const p = asPoint(item);
-        if (p) {
-          points.push(p);
-        }
+  return items.map(asPair).filter((p): p is Point => p !== null);
+}
+
+/**
+ * The integration's obstacle log for one plan run:
+ * ``{id, plan_name, ended, barriers: [{points}], detections: [{point, source, distance_m, t, count}]}``.
+ * A bare list of clusters is accepted too.
+ */
+export function obstacleLayer(data: unknown): ObstacleLayer {
+  const layer: ObstacleLayer = { runId: null, planName: null, active: false, barriers: [], detections: [] };
+  if (Array.isArray(data)) {
+    layer.barriers = data.map(clusterPoints).filter((c) => c.length > 0);
+    return layer;
+  }
+  if (!data || typeof data !== "object") {
+    return layer;
+  }
+  const run = data as Record<string, unknown>;
+  layer.runId = typeof run.id === "string" ? run.id : null;
+  layer.planName = typeof run.plan_name === "string" ? run.plan_name : null;
+  layer.active = run.ended === null || run.ended === undefined;
+  if (Array.isArray(run.barriers)) {
+    layer.barriers = run.barriers.map(clusterPoints).filter((c) => c.length > 0);
+  }
+  if (Array.isArray(run.detections)) {
+    for (const raw of run.detections) {
+      const d = raw as Record<string, unknown>;
+      const point = asPair(d.point);
+      if (!point) {
+        continue;
       }
-    }
-    if (points.length) {
-      clusters.push(points);
+      layer.detections.push({
+        point,
+        source: typeof d.source === "string" ? d.source : "unknown",
+        distance_m: typeof d.distance_m === "number" ? d.distance_m : null,
+        t: typeof d.t === "number" ? d.t : null,
+        count: typeof d.count === "number" ? d.count : 1,
+      });
     }
   }
-  return clusters;
+  return layer;
+}
+
+/** Barrier clusters only, from either shape. */
+export function obstacleClusters(data: unknown): Point[][] {
+  return obstacleLayer(data).barriers;
 }
 
 /** Every point in the payload. */
