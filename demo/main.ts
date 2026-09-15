@@ -2,14 +2,15 @@ import "../src/yarbo-local-card";
 import type { YarboLocalCard } from "../src/yarbo-local-card";
 import type { HomeAssistant, LiveEvent, MapData, StreamEvent } from "../src/types";
 import site from "./site-map.json";
+import sample from "./feedback-sample.json";
 
 if (location.search.includes("dark")) {
   document.body.classList.add("dark");
 }
 
-const map = site as MapData;
-const area = map.zones.find((z) => z.family === "areas")!;
-const pathway = map.zones.find((z) => z.family === "pathways")!;
+const map = site as unknown as MapData;
+const area = map.zones.find((z) => z.name === "East Lawn") ?? map.zones.find((z) => z.family === "areas")!;
+const pathway = map.zones.find((z) => z.name === "east lawn pathway") ?? map.zones.find((z) => z.family === "pathways")!;
 const route = [...pathway.points, ...area.points, ...[...pathway.points].reverse()];
 
 function* drive(): Generator<[number, number, number, boolean]> {
@@ -40,6 +41,11 @@ const hass: HomeAssistant = {
   connection: {
     async subscribeMessage<T>(callback: (event: T) => void): Promise<() => void> {
       const it = drive();
+      // Real plan progress and obstacle clusters recorded from the robot mowing East Lawn.
+      setTimeout(() => {
+        callback({ type: "feedback", leaf: "plan_feedback", data: sample.plan_feedback } as StreamEvent as T);
+        callback({ type: "feedback", leaf: "obstacles", data: sample.obstacles } as StreamEvent as T);
+      }, 300);
       let battery = 92;
       const timer = setInterval(() => {
         const [x, y, phi, reverse] = it.next().value as [number, number, number, boolean];

@@ -1023,6 +1023,12 @@ var qe = o`
   svg .obstacle-dot {
     fill: var(--yl-nogo);
   }
+  svg .obstacle-ring {
+    fill: color-mix(in srgb, var(--yl-nogo) 22%, transparent);
+    stroke: var(--yl-nogo);
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
+  }
   svg .robot {
     fill: var(--yl-robot);
     stroke: var(--yl-surface);
@@ -1667,10 +1673,9 @@ var tt = "0.1.1", Z = 440, nt = .55, rt = 6, it = 14, at = {
 		for (let e of n.visited) t.push(F`<polyline class="plan-visited" points=${$(e)}></polyline>`);
 		let r = Ne(this._feedback.recharge_feedback);
 		r.length >= 2 && t.push(F`<polyline class="route" points=${$(r)}></polyline>`);
-		for (let n of Pe(this._feedback.obstacles)) if (n.length >= 2) t.push(F`<polyline class="obstacle" points=${$(n)}></polyline>`);
-		else {
-			let [r, i] = n[0];
-			t.push(F`<circle class="obstacle-dot" cx=${-r} cy=${-i} r=${Math.max(.08, 3 * e)}></circle>`);
+		for (let n of Pe(this._feedback.obstacles)) {
+			let r = n.reduce((e, t) => e + t[0], 0) / n.length, i = n.reduce((e, t) => e + t[1], 0) / n.length, a = Math.max(...n.map((e) => Math.hypot(e[0] - r, e[1] - i)));
+			t.push(F`<circle class="obstacle-ring" cx=${-r} cy=${-i} r=${Math.max(a + .25, 7 * e)}></circle>`), n.length >= 2 ? t.push(F`<polyline class="obstacle" points=${$(n)}></polyline>`) : t.push(F`<circle class="obstacle-dot" cx=${-r} cy=${-i} r=${Math.max(.08, 2.5 * e)}></circle>`);
 		}
 		return t;
 	}

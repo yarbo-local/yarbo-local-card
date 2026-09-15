@@ -665,11 +665,15 @@ export class YarboLocalCard extends LitElement {
       parts.push(svg`<polyline class="route" points=${displayPoints(route)}></polyline>`);
     }
     for (const cluster of obstacleClusters(this._feedback.obstacles)) {
+      // A ring that keeps a minimum on-screen size, so obstacles stay findable zoomed out.
+      const cx = cluster.reduce((s, p) => s + p[0], 0) / cluster.length;
+      const cy = cluster.reduce((s, p) => s + p[1], 0) / cluster.length;
+      const spread = Math.max(...cluster.map((p) => Math.hypot(p[0] - cx, p[1] - cy)));
+      parts.push(svg`<circle class="obstacle-ring" cx=${-cx} cy=${-cy} r=${Math.max(spread + 0.25, 7 * mpp)}></circle>`);
       if (cluster.length >= 2) {
         parts.push(svg`<polyline class="obstacle" points=${displayPoints(cluster)}></polyline>`);
       } else {
-        const [x, y] = cluster[0]!;
-        parts.push(svg`<circle class="obstacle-dot" cx=${-x} cy=${-y} r=${Math.max(0.08, 3 * mpp)}></circle>`);
+        parts.push(svg`<circle class="obstacle-dot" cx=${-cx} cy=${-cy} r=${Math.max(0.08, 2.5 * mpp)}></circle>`);
       }
     }
     return parts;
