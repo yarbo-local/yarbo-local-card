@@ -15,6 +15,7 @@ export interface HomeAssistant {
     ): Promise<() => Promise<void> | void>;
   };
   user?: { is_admin: boolean; name?: string };
+  locale?: { language: string };
   entities?: Record<string, HassEntityRegistryEntry>;
   states: Record<string, { state: string; attributes: Record<string, unknown> }>;
 }
@@ -60,6 +61,15 @@ export interface MapData {
   bounds: [number, number, number, number] | null;
 }
 
+/** A robot fault. ``key`` is null while the code is not identified; ``since`` is epoch seconds. */
+export interface Fault {
+  code: number;
+  key: string | null;
+  description: string;
+  hint: string;
+  since: number | null;
+}
+
 export interface LiveEvent {
   type: "live";
   t: number;
@@ -69,6 +79,8 @@ export interface LiveEvent {
   battery: number | null;
   charging: boolean;
   error_code: number;
+  fault?: Fault | null;
+  pause_reason?: string | null;
   head: string;
   plan_running: boolean;
   x: number | null;

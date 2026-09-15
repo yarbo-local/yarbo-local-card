@@ -68,6 +68,43 @@ export const cardStyles = css`
   .chip.bad {
     color: var(--error-color, #c62828);
   }
+  .fault {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px 16px 12px;
+    background: color-mix(in srgb, var(--error-color, #c62828) 12%, var(--yl-surface));
+    color: var(--yl-ink);
+    border-top: 1px solid color-mix(in srgb, var(--error-color, #c62828) 30%, transparent);
+  }
+  .fault > svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    fill: var(--error-color, #c62828);
+    margin-top: 1px;
+  }
+  .fault-text {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .fault-title {
+    font-weight: 600;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
+  }
+  .fault-detail {
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--yl-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .fault-hint {
+    font-size: 0.9rem;
+  }
   .map {
     position: relative;
     background: var(--yl-ground);
@@ -372,6 +409,13 @@ export const cardStyles = css`
     stroke: var(--yl-robot);
     stroke-width: 1.5px;
     vector-effect: non-scaling-stroke;
+  }
+  svg .robot.fault {
+    fill: var(--error-color, #c62828);
+  }
+  svg .robot-halo.fault {
+    fill: color-mix(in srgb, var(--error-color, #c62828) 25%, transparent);
+    stroke: var(--error-color, #c62828);
   }
   svg .robot.asleep {
     fill: var(--yl-muted);

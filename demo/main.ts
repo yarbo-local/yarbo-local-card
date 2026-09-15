@@ -46,6 +46,9 @@ const hass: HomeAssistant = {
         callback({ type: "feedback", leaf: "plan_feedback", data: sample.plan_feedback } as StreamEvent as T);
         callback({ type: "feedback", leaf: "obstacles", data: sample.obstacles } as StreamEvent as T);
       }, 300);
+      // ?fault=902 shows the tilt the robot reported on the West Lawn.
+      const faultCode = Number(new URLSearchParams(location.search).get("fault") ?? 0);
+      const faultSince = Date.now() / 1000 - 240;
       let battery = 92;
       const timer = setInterval(() => {
         const [x, y, phi, reverse] = it.next().value as [number, number, number, boolean];
@@ -55,10 +58,23 @@ const hass: HomeAssistant = {
           t: Date.now() / 1000,
           connected: true,
           awake: true,
-          activity: "working",
+          activity: faultCode ? "error" : "working",
           battery: Math.round(battery),
           charging: false,
-          error_code: 0,
+          error_code: faultCode,
+          fault: faultCode
+            ? {
+                code: faultCode,
+                key: faultCode === 902 ? "tilted" : null,
+                description: faultCode === 902 ? "Tilted or flipped over" : `Fault ${faultCode}`,
+                hint:
+                  faultCode === 902
+                    ? "Check the robot is level and free, then resume the plan in the Yarbo app."
+                    : "This code is not identified yet. The Yarbo app shows what it means.",
+                since: faultSince,
+              }
+            : null,
+          pause_reason: faultCode ? "fault" : null,
           head: "snow_blower",
           plan_running: true,
           x,

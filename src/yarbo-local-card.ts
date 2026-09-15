@@ -5,6 +5,7 @@ import {
   mdiCrosshairsGps,
   mdiEraser,
   mdiFitToScreenOutline,
+  mdiAlertCircle,
   mdiAlertOctagonOutline,
   mdiImageEditOutline,
   mdiLanDisconnect,
@@ -28,6 +29,7 @@ import {
   trailSegments,
   type TrailPoint,
 } from "./geometry";
+import { faultDetail, faultOf, statusLabel } from "./status";
 import { cardStyles } from "./styles";
 import type {
   Background,
@@ -43,7 +45,7 @@ import type {
 import { fitView, metresPerPixel, pixelToDisplay, viewBox, zoomAt, type Size, type View } from "./view";
 import "./editor";
 
-const VERSION = "0.2.0";
+const VERSION = "0.3.0";
 const DEFAULT_HEIGHT = 440;
 const CUT_WIDTH_M = 0.55;
 const TAP_SLOP_PX = 6;
@@ -66,20 +68,6 @@ interface AlignState {
   busy?: boolean;
   error?: string;
 }
-
-const ACTIVITY_LABEL: Record<string, string> = {
-  sleeping: "Sleeping",
-  idle: "Idle",
-  calculating_route: "Calculating route",
-  heading_to_area: "Heading to area",
-  working: "Working",
-  waypoint: "Waypoint",
-  completed: "Completed",
-  paused: "Paused",
-  returning: "Returning",
-  charging: "Charging",
-  error: "Error",
-};
 
 const icon = (path: string) => svg`<svg viewBox="0 0 24 24" aria-hidden="true"><path d=${path}></path></svg>`;
 
@@ -533,6 +521,7 @@ export class YarboLocalCard extends LitElement {
     const picking = Boolean(this._align && this._align.step !== "url" && this._align.step !== "preview");
     return html`<ha-card>
       ${this._renderHeader()}
+      ${this._renderFault()}
       <div
         class="map ${this._dragging ? "dragging" : ""} ${picking ? "picking" : ""}"
         style="height:${height}px"
@@ -573,8 +562,8 @@ export class YarboLocalCard extends LitElement {
           ? html`<span class="chip bad">${icon(mdiLanDisconnect)}Offline</span>`
           : nothing}
         ${live
-          ? html`<span class="chip ${live.activity === "error" ? "bad" : ""}"
-              >${live.awake === false ? icon(mdiSleep) : nothing}${ACTIVITY_LABEL[live.activity] ?? live.activity}</span
+          ? html`<span class="chip ${faultOf(live) ? "bad" : ""}"
+              >${faultOf(live) ? icon(mdiAlertCircle) : live.awake === false ? icon(mdiSleep) : nothing}${statusLabel(live)}</span
             >`
           : nothing}
         ${this._obstacleCount() > 0
@@ -590,6 +579,21 @@ export class YarboLocalCard extends LitElement {
               >${icon(mdiSatelliteVariant)}${rtk.label}${live.satellites ? html` · ${live.satellites}` : nothing}</span
             >`
           : nothing}
+      </div>
+    </div>`;
+  }
+
+  private _renderFault() {
+    const fault = this._live ? faultOf(this._live) : null;
+    if (!fault) {
+      return nothing;
+    }
+    const detail = faultDetail(fault, this.hass?.locale?.language);
+    return html`<div class="fault" role="alert">
+      ${icon(mdiAlertCircle)}
+      <div class="fault-text">
+        <div class="fault-title">${fault.description}${detail ? html`<span class="fault-detail">${detail}</span>` : nothing}</div>
+        <div class="fault-hint">${fault.hint}</div>
       </div>
     </div>`;
   }
@@ -726,8 +730,8 @@ export class YarboLocalCard extends LitElement {
     const footprint = robotFootprint(live.x, live.y, live.phi);
     const [cx, cy] = toDisplay(live.x, live.y);
     const tooSmall = 1.3 / mpp < 22;
-    return svg`${tooSmall ? svg`<circle class="robot-halo" cx=${cx} cy=${cy} r=${11 * mpp}></circle>` : nothing}
-      <polygon class="robot ${live.awake === false ? "asleep" : ""}" points=${displayPoints(footprint)}></polygon>`;
+    return svg`${tooSmall ? svg`<circle class="robot-halo ${faultOf(live) ? "fault" : ""}" cx=${cx} cy=${cy} r=${11 * mpp}></circle>` : nothing}
+      <polygon class="robot ${faultOf(live) ? "fault" : live.awake === false ? "asleep" : ""}" points=${displayPoints(footprint)}></polygon>`;
   }
 
   private _renderLabels(mpp: number) {
