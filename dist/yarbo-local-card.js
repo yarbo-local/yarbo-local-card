@@ -58,7 +58,7 @@ var e = globalThis, t = e.ShadowRoot && (e.ShadyCSS === void 0 || e.ShadyCSS.nat
 		}
 		return n;
 	}
-}, h = (e, t) => !l(e, t), oe = {
+}, h = (e, t) => !l(e, t), g = {
 	attribute: !0,
 	type: String,
 	converter: m,
@@ -67,14 +67,14 @@ var e = globalThis, t = e.ShadowRoot && (e.ShadyCSS === void 0 || e.ShadyCSS.nat
 	hasChanged: h
 };
 Symbol.metadata ??= Symbol("metadata"), f.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-var g = class extends HTMLElement {
+var _ = class extends HTMLElement {
 	static addInitializer(e) {
 		this._$Ei(), (this.l ??= []).push(e);
 	}
 	static get observedAttributes() {
 		return this.finalize(), this._$Eh && [...this._$Eh.keys()];
 	}
-	static createProperty(e, t = oe) {
+	static createProperty(e, t = g) {
 		if (t.state && (t.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((t = Object.create(t)).wrapped = !0), this.elementProperties.set(e, t), !t.noAccessor) {
 			let n = Symbol(), r = this.getPropertyDescriptor(e, n, t);
 			r !== void 0 && u(this.prototype, e, r);
@@ -100,7 +100,7 @@ var g = class extends HTMLElement {
 		};
 	}
 	static getPropertyOptions(e) {
-		return this.elementProperties.get(e) ?? oe;
+		return this.elementProperties.get(e) ?? g;
 	}
 	static _$Ei() {
 		if (this.hasOwnProperty(p("elementProperties"))) return;
@@ -251,89 +251,89 @@ var g = class extends HTMLElement {
 	updated(e) {}
 	firstUpdated(e) {}
 };
-g.elementStyles = [], g.shadowRootOptions = { mode: "open" }, g[p("elementProperties")] = /* @__PURE__ */ new Map(), g[p("finalized")] = /* @__PURE__ */ new Map(), ae?.({ ReactiveElement: g }), (f.reactiveElementVersions ??= []).push("2.1.2");
+_.elementStyles = [], _.shadowRootOptions = { mode: "open" }, _[p("elementProperties")] = /* @__PURE__ */ new Map(), _[p("finalized")] = /* @__PURE__ */ new Map(), ae?.({ ReactiveElement: _ }), (f.reactiveElementVersions ??= []).push("2.1.2");
 //#endregion
 //#region node_modules/lit-html/lit-html.js
-var _ = globalThis, se = (e) => e, v = _.trustedTypes, ce = v ? v.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, le = "$lit$", y = `lit$${Math.random().toFixed(9).slice(2)}$`, ue = "?" + y, de = `<${ue}>`, b = document, x = () => b.createComment(""), S = (e) => e === null || typeof e != "object" && typeof e != "function", C = Array.isArray, fe = (e) => C(e) || typeof e?.[Symbol.iterator] == "function", w = "[ 	\n\f\r]", T = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, pe = /-->/g, me = />/g, E = RegExp(`>|${w}(?:([^\\s"'>=/]+)(${w}*=${w}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"), he = /'/g, D = /"/g, O = /^(?:script|style|textarea|title)$/i, k = (e) => (t, ...n) => ({
+var v = globalThis, oe = (e) => e, y = v.trustedTypes, se = y ? y.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, b = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, S = "?" + x, ce = `<${S}>`, C = document, w = () => C.createComment(""), T = (e) => e === null || typeof e != "object" && typeof e != "function", E = Array.isArray, le = (e) => E(e) || typeof e?.[Symbol.iterator] == "function", D = "[ 	\n\f\r]", O = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, ue = /-->/g, de = />/g, k = RegExp(`>|${D}(?:([^\\s"'>=/]+)(${D}*=${D}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"), fe = /'/g, pe = /"/g, me = /^(?:script|style|textarea|title)$/i, he = (e) => (t, ...n) => ({
 	_$litType$: e,
 	strings: t,
 	values: n
-}), A = k(1), j = k(2), M = Symbol.for("lit-noChange"), N = Symbol.for("lit-nothing"), ge = /* @__PURE__ */ new WeakMap(), P = b.createTreeWalker(b, 129);
-function _e(e, t) {
-	if (!C(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
-	return ce === void 0 ? t : ce.createHTML(t);
+}), A = he(1), j = he(2), M = Symbol.for("lit-noChange"), N = Symbol.for("lit-nothing"), P = /* @__PURE__ */ new WeakMap(), F = C.createTreeWalker(C, 129);
+function I(e, t) {
+	if (!E(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
+	return se === void 0 ? t : se.createHTML(t);
 }
-var ve = (e, t) => {
-	let n = e.length - 1, r = [], i, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", o = T;
+var ge = (e, t) => {
+	let n = e.length - 1, r = [], i, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", o = O;
 	for (let t = 0; t < n; t++) {
 		let n = e[t], s, c, l = -1, u = 0;
-		for (; u < n.length && (o.lastIndex = u, c = o.exec(n), c !== null);) u = o.lastIndex, o === T ? c[1] === "!--" ? o = pe : c[1] === void 0 ? c[2] === void 0 ? c[3] !== void 0 && (o = E) : (O.test(c[2]) && (i = RegExp("</" + c[2], "g")), o = E) : o = me : o === E ? c[0] === ">" ? (o = i ?? T, l = -1) : c[1] === void 0 ? l = -2 : (l = o.lastIndex - c[2].length, s = c[1], o = c[3] === void 0 ? E : c[3] === "\"" ? D : he) : o === D || o === he ? o = E : o === pe || o === me ? o = T : (o = E, i = void 0);
-		let d = o === E && e[t + 1].startsWith("/>") ? " " : "";
-		a += o === T ? n + de : l >= 0 ? (r.push(s), n.slice(0, l) + le + n.slice(l) + y + d) : n + y + (l === -2 ? t : d);
+		for (; u < n.length && (o.lastIndex = u, c = o.exec(n), c !== null);) u = o.lastIndex, o === O ? c[1] === "!--" ? o = ue : c[1] === void 0 ? c[2] === void 0 ? c[3] !== void 0 && (o = k) : (me.test(c[2]) && (i = RegExp("</" + c[2], "g")), o = k) : o = de : o === k ? c[0] === ">" ? (o = i ?? O, l = -1) : c[1] === void 0 ? l = -2 : (l = o.lastIndex - c[2].length, s = c[1], o = c[3] === void 0 ? k : c[3] === "\"" ? pe : fe) : o === pe || o === fe ? o = k : o === ue || o === de ? o = O : (o = k, i = void 0);
+		let d = o === k && e[t + 1].startsWith("/>") ? " " : "";
+		a += o === O ? n + ce : l >= 0 ? (r.push(s), n.slice(0, l) + b + n.slice(l) + x + d) : n + x + (l === -2 ? t : d);
 	}
-	return [_e(e, a + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
-}, F = class e {
+	return [I(e, a + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
+}, L = class e {
 	constructor({ strings: t, _$litType$: n }, r) {
 		let i;
 		this.parts = [];
-		let a = 0, o = 0, s = t.length - 1, c = this.parts, [l, u] = ve(t, n);
-		if (this.el = e.createElement(l, r), P.currentNode = this.el.content, n === 2 || n === 3) {
+		let a = 0, o = 0, s = t.length - 1, c = this.parts, [l, u] = ge(t, n);
+		if (this.el = e.createElement(l, r), F.currentNode = this.el.content, n === 2 || n === 3) {
 			let e = this.el.content.firstChild;
 			e.replaceWith(...e.childNodes);
 		}
-		for (; (i = P.nextNode()) !== null && c.length < s;) {
+		for (; (i = F.nextNode()) !== null && c.length < s;) {
 			if (i.nodeType === 1) {
-				if (i.hasAttributes()) for (let e of i.getAttributeNames()) if (e.endsWith(le)) {
-					let t = u[o++], n = i.getAttribute(e).split(y), r = /([.?@])?(.*)/.exec(t);
+				if (i.hasAttributes()) for (let e of i.getAttributeNames()) if (e.endsWith(b)) {
+					let t = u[o++], n = i.getAttribute(e).split(x), r = /([.?@])?(.*)/.exec(t);
 					c.push({
 						type: 1,
 						index: a,
 						name: r[2],
 						strings: n,
-						ctor: r[1] === "." ? be : r[1] === "?" ? xe : r[1] === "@" ? Se : R
+						ctor: r[1] === "." ? ve : r[1] === "?" ? ye : r[1] === "@" ? be : B
 					}), i.removeAttribute(e);
-				} else e.startsWith(y) && (c.push({
+				} else e.startsWith(x) && (c.push({
 					type: 6,
 					index: a
 				}), i.removeAttribute(e));
-				if (O.test(i.tagName)) {
-					let e = i.textContent.split(y), t = e.length - 1;
+				if (me.test(i.tagName)) {
+					let e = i.textContent.split(x), t = e.length - 1;
 					if (t > 0) {
-						i.textContent = v ? v.emptyScript : "";
-						for (let n = 0; n < t; n++) i.append(e[n], x()), P.nextNode(), c.push({
+						i.textContent = y ? y.emptyScript : "";
+						for (let n = 0; n < t; n++) i.append(e[n], w()), F.nextNode(), c.push({
 							type: 2,
 							index: ++a
 						});
-						i.append(e[t], x());
+						i.append(e[t], w());
 					}
 				}
 			} else if (i.nodeType === 8) {
-				if (i.data === ue) c.push({
+				if (i.data === S) c.push({
 					type: 2,
 					index: a
 				});
 				else {
 					let e = -1;
-					for (; (e = i.data.indexOf(y, e + 1)) !== -1;) c.push({
+					for (; (e = i.data.indexOf(x, e + 1)) !== -1;) c.push({
 						type: 7,
 						index: a
-					}), e += y.length - 1;
+					}), e += x.length - 1;
 				}
 			}
 			a++;
 		}
 	}
 	static createElement(e, t) {
-		let n = b.createElement("template");
+		let n = C.createElement("template");
 		return n.innerHTML = e, n;
 	}
 };
-function I(e, t, n = e, r) {
+function R(e, t, n = e, r) {
 	if (t === M) return t;
-	let i = r === void 0 ? n._$Cl : n._$Co?.[r], a = S(t) ? void 0 : t._$litDirective$;
-	return i?.constructor !== a && (i?._$AO?.(!1), a === void 0 ? i = void 0 : (i = new a(e), i._$AT(e, n, r)), r === void 0 ? n._$Cl = i : (n._$Co ??= [])[r] = i), i !== void 0 && (t = I(e, i._$AS(e, t.values), i, r)), t;
+	let i = r === void 0 ? n._$Cl : n._$Co?.[r], a = T(t) ? void 0 : t._$litDirective$;
+	return i?.constructor !== a && (i?._$AO?.(!1), a === void 0 ? i = void 0 : (i = new a(e), i._$AT(e, n, r)), r === void 0 ? n._$Cl = i : (n._$Co ??= [])[r] = i), i !== void 0 && (t = R(e, i._$AS(e, t.values), i, r)), t;
 }
-var ye = class {
+var _e = class {
 	constructor(e, t) {
 		this._$AV = [], this._$AN = void 0, this._$AD = e, this._$AM = t;
 	}
@@ -344,23 +344,23 @@ var ye = class {
 		return this._$AM._$AU;
 	}
 	u(e) {
-		let { el: { content: t }, parts: n } = this._$AD, r = (e?.creationScope ?? b).importNode(t, !0);
-		P.currentNode = r;
-		let i = P.nextNode(), a = 0, o = 0, s = n[0];
+		let { el: { content: t }, parts: n } = this._$AD, r = (e?.creationScope ?? C).importNode(t, !0);
+		F.currentNode = r;
+		let i = F.nextNode(), a = 0, o = 0, s = n[0];
 		for (; s !== void 0;) {
 			if (a === s.index) {
 				let t;
-				s.type === 2 ? t = new L(i, i.nextSibling, this, e) : s.type === 1 ? t = new s.ctor(i, s.name, s.strings, this, e) : s.type === 6 && (t = new Ce(i, this, e)), this._$AV.push(t), s = n[++o];
+				s.type === 2 ? t = new z(i, i.nextSibling, this, e) : s.type === 1 ? t = new s.ctor(i, s.name, s.strings, this, e) : s.type === 6 && (t = new xe(i, this, e)), this._$AV.push(t), s = n[++o];
 			}
-			a !== s?.index && (i = P.nextNode(), a++);
+			a !== s?.index && (i = F.nextNode(), a++);
 		}
-		return P.currentNode = b, r;
+		return F.currentNode = C, r;
 	}
 	p(e) {
 		let t = 0;
 		for (let n of this._$AV) n !== void 0 && (n.strings === void 0 ? n._$AI(e[t]) : (n._$AI(e, n, t), t += n.strings.length - 2)), t++;
 	}
-}, L = class e {
+}, z = class e {
 	get _$AU() {
 		return this._$AM?._$AU ?? this._$Cv;
 	}
@@ -378,7 +378,7 @@ var ye = class {
 		return this._$AB;
 	}
 	_$AI(e, t = this) {
-		e = I(this, e, t), S(e) ? e === N || e == null || e === "" ? (this._$AH !== N && this._$AR(), this._$AH = N) : e !== this._$AH && e !== M && this._(e) : e._$litType$ === void 0 ? e.nodeType === void 0 ? fe(e) ? this.k(e) : this._(e) : this.T(e) : this.$(e);
+		e = R(this, e, t), T(e) ? e === N || e == null || e === "" ? (this._$AH !== N && this._$AR(), this._$AH = N) : e !== this._$AH && e !== M && this._(e) : e._$litType$ === void 0 ? e.nodeType === void 0 ? le(e) ? this.k(e) : this._(e) : this.T(e) : this.$(e);
 	}
 	O(e) {
 		return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -387,36 +387,36 @@ var ye = class {
 		this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
 	}
 	_(e) {
-		this._$AH !== N && S(this._$AH) ? this._$AA.nextSibling.data = e : this.T(b.createTextNode(e)), this._$AH = e;
+		this._$AH !== N && T(this._$AH) ? this._$AA.nextSibling.data = e : this.T(C.createTextNode(e)), this._$AH = e;
 	}
 	$(e) {
-		let { values: t, _$litType$: n } = e, r = typeof n == "number" ? this._$AC(e) : (n.el === void 0 && (n.el = F.createElement(_e(n.h, n.h[0]), this.options)), n);
+		let { values: t, _$litType$: n } = e, r = typeof n == "number" ? this._$AC(e) : (n.el === void 0 && (n.el = L.createElement(I(n.h, n.h[0]), this.options)), n);
 		if (this._$AH?._$AD === r) this._$AH.p(t);
 		else {
-			let e = new ye(r, this), n = e.u(this.options);
+			let e = new _e(r, this), n = e.u(this.options);
 			e.p(t), this.T(n), this._$AH = e;
 		}
 	}
 	_$AC(e) {
-		let t = ge.get(e.strings);
-		return t === void 0 && ge.set(e.strings, t = new F(e)), t;
+		let t = P.get(e.strings);
+		return t === void 0 && P.set(e.strings, t = new L(e)), t;
 	}
 	k(t) {
-		C(this._$AH) || (this._$AH = [], this._$AR());
+		E(this._$AH) || (this._$AH = [], this._$AR());
 		let n = this._$AH, r, i = 0;
-		for (let a of t) i === n.length ? n.push(r = new e(this.O(x()), this.O(x()), this, this.options)) : r = n[i], r._$AI(a), i++;
+		for (let a of t) i === n.length ? n.push(r = new e(this.O(w()), this.O(w()), this, this.options)) : r = n[i], r._$AI(a), i++;
 		i < n.length && (this._$AR(r && r._$AB.nextSibling, i), n.length = i);
 	}
 	_$AR(e = this._$AA.nextSibling, t) {
 		for (this._$AP?.(!1, !0, t); e !== this._$AB;) {
-			let t = se(e).nextSibling;
-			se(e).remove(), e = t;
+			let t = oe(e).nextSibling;
+			oe(e).remove(), e = t;
 		}
 	}
 	setConnected(e) {
 		this._$AM === void 0 && (this._$Cv = e, this._$AP?.(e));
 	}
-}, R = class {
+}, B = class {
 	get tagName() {
 		return this.element.tagName;
 	}
@@ -428,43 +428,43 @@ var ye = class {
 	}
 	_$AI(e, t = this, n, r) {
 		let i = this.strings, a = !1;
-		if (i === void 0) e = I(this, e, t, 0), a = !S(e) || e !== this._$AH && e !== M, a && (this._$AH = e);
+		if (i === void 0) e = R(this, e, t, 0), a = !T(e) || e !== this._$AH && e !== M, a && (this._$AH = e);
 		else {
 			let r = e, o, s;
-			for (e = i[0], o = 0; o < i.length - 1; o++) s = I(this, r[n + o], t, o), s === M && (s = this._$AH[o]), a ||= !S(s) || s !== this._$AH[o], s === N ? e = N : e !== N && (e += (s ?? "") + i[o + 1]), this._$AH[o] = s;
+			for (e = i[0], o = 0; o < i.length - 1; o++) s = R(this, r[n + o], t, o), s === M && (s = this._$AH[o]), a ||= !T(s) || s !== this._$AH[o], s === N ? e = N : e !== N && (e += (s ?? "") + i[o + 1]), this._$AH[o] = s;
 		}
 		a && !r && this.j(e);
 	}
 	j(e) {
 		e === N ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
 	}
-}, be = class extends R {
+}, ve = class extends B {
 	constructor() {
 		super(...arguments), this.type = 3;
 	}
 	j(e) {
 		this.element[this.name] = e === N ? void 0 : e;
 	}
-}, xe = class extends R {
+}, ye = class extends B {
 	constructor() {
 		super(...arguments), this.type = 4;
 	}
 	j(e) {
 		this.element.toggleAttribute(this.name, !!e && e !== N);
 	}
-}, Se = class extends R {
+}, be = class extends B {
 	constructor(e, t, n, r, i) {
 		super(e, t, n, r, i), this.type = 5;
 	}
 	_$AI(e, t = this) {
-		if ((e = I(this, e, t, 0) ?? N) === M) return;
+		if ((e = R(this, e, t, 0) ?? N) === M) return;
 		let n = this._$AH, r = e === N && n !== N || e.capture !== n.capture || e.once !== n.once || e.passive !== n.passive, i = e !== N && (n === N || r);
 		r && this.element.removeEventListener(this.name, this, n), i && this.element.addEventListener(this.name, this, e), this._$AH = e;
 	}
 	handleEvent(e) {
 		typeof this._$AH == "function" ? this._$AH.call(this.options?.host ?? this.element, e) : this._$AH.handleEvent(e);
 	}
-}, Ce = class {
+}, xe = class {
 	constructor(e, t, n) {
 		this.element = e, this.type = 6, this._$AN = void 0, this._$AM = t, this.options = n;
 	}
@@ -472,18 +472,18 @@ var ye = class {
 		return this._$AM._$AU;
 	}
 	_$AI(e) {
-		I(this, e);
+		R(this, e);
 	}
-}, we = _.litHtmlPolyfillSupport;
-we?.(F, L), (_.litHtmlVersions ??= []).push("3.3.3");
-var Te = (e, t, n) => {
+}, Se = v.litHtmlPolyfillSupport;
+Se?.(L, z), (v.litHtmlVersions ??= []).push("3.3.3");
+var Ce = (e, t, n) => {
 	let r = n?.renderBefore ?? t, i = r._$litPart$;
 	if (i === void 0) {
 		let e = n?.renderBefore ?? null;
-		r._$litPart$ = i = new L(t.insertBefore(x(), e), e, void 0, n ?? {});
+		r._$litPart$ = i = new z(t.insertBefore(w(), e), e, void 0, n ?? {});
 	}
 	return i._$AI(e), i;
-}, z = globalThis, B = class extends g {
+}, V = globalThis, H = class extends _ {
 	constructor() {
 		super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
 	}
@@ -493,7 +493,7 @@ var Te = (e, t, n) => {
 	}
 	update(e) {
 		let t = this.render();
-		this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = Te(t, this.renderRoot, this.renderOptions);
+		this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = Ce(t, this.renderRoot, this.renderOptions);
 	}
 	connectedCallback() {
 		super.connectedCallback(), this._$Do?.setConnected(!0);
@@ -505,26 +505,26 @@ var Te = (e, t, n) => {
 		return M;
 	}
 };
-B._$litElement$ = !0, B.finalized = !0, z.litElementHydrateSupport?.({ LitElement: B });
-var Ee = z.litElementPolyfillSupport;
-Ee?.({ LitElement: B }), (z.litElementVersions ??= []).push("4.2.2");
+H._$litElement$ = !0, H.finalized = !0, V.litElementHydrateSupport?.({ LitElement: H });
+var we = V.litElementPolyfillSupport;
+we?.({ LitElement: H }), (V.litElementVersions ??= []).push("4.2.2");
 //#endregion
 //#region node_modules/@mdi/js/mdi.js
-var V = "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z", De = "M8.27,3L3,8.27V15.73L8.27,21H15.73C17.5,19.24 21,15.73 21,15.73V8.27L15.73,3M9.1,5H14.9L19,9.1V14.9L14.9,19H9.1L5,14.9V9.1M11,15H13V17H11V15M11,7H13V13H11V7", Oe = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.67C6,21.4 6.6,22 7.33,22H16.67A1.33,1.33 0 0,0 18,20.67V5.33C18,4.6 17.4,4 16.67,4Z", ke = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.66C6,21.4 6.6,22 7.33,22H16.66C17.4,22 18,21.4 18,20.67V5.33C18,4.6 17.4,4 16.67,4M11,20V14.5H9L13,7V12.5H15", Ae = "M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M3.05,13H1V11H3.05C3.5,6.83 6.83,3.5 11,3.05V1H13V3.05C17.17,3.5 20.5,6.83 20.95,11H23V13H20.95C20.5,17.17 17.17,20.5 13,20.95V23H11V20.95C6.83,20.5 3.5,17.17 3.05,13M12,5A7,7 0 0,0 5,12A7,7 0 0,0 12,19A7,7 0 0,0 19,12A7,7 0 0,0 12,5Z", je = "M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53C10.44,22.09 7.91,22.09 6.34,20.53L2.81,17C2.03,16.21 2.03,14.95 2.81,14.16L13.41,3.56C14.2,2.78 15.46,2.78 16.24,3.56M4.22,15.58L7.76,19.11C8.54,19.9 9.8,19.9 10.59,19.11L14.12,15.58L9.17,10.63L4.22,15.58Z", Me = "M17 4H20C21.1 4 22 4.9 22 6V8H20V6H17V4M4 8V6H7V4H4C2.9 4 2 4.9 2 6V8H4M20 16V18H17V20H20C21.1 20 22 19.1 22 18V16H20M7 18H4V16H2V18C2 19.1 2.9 20 4 20H7V18M16 10V14H8V10H16M18 8H6V16H18V8Z", Ne = "M22.7 14.3L21.7 15.3L19.7 13.3L20.7 12.3C20.8 12.2 20.9 12.1 21.1 12.1C21.2 12.1 21.4 12.2 21.5 12.3L22.8 13.6C22.9 13.8 22.9 14.1 22.7 14.3M13 19.9V22H15.1L21.2 15.9L19.2 13.9L13 19.9M11.21 15.83L9.25 13.47L6.5 17H13.12L15.66 14.55L13.96 12.29L11.21 15.83M11 19.9V19.05L11.05 19H5V5H19V11.31L21 9.38V5C21 3.9 20.11 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H11V19.9Z", Pe = "M4,1C2.89,1 2,1.89 2,3V7C2,8.11 2.89,9 4,9H1V11H13V9H10C11.11,9 12,8.11 12,7V3C12,1.89 11.11,1 10,1H4M4,3H10V7H4V3M14,13C12.89,13 12,13.89 12,15V19C12,20.11 12.89,21 14,21H11V23H23V21H20C21.11,21 22,20.11 22,19V15C22,13.89 21.11,13 20,13H14M3.88,13.46L2.46,14.88L4.59,17L2.46,19.12L3.88,20.54L6,18.41L8.12,20.54L9.54,19.12L7.41,17L9.54,14.88L8.12,13.46L6,15.59L3.88,13.46M14,15H20V19H14V15Z", Fe = "M11.62,1L17.28,6.67L15.16,8.79L13.04,6.67L11.62,8.09L13.95,10.41L12.79,11.58L13.24,12.04C14.17,11.61 15.31,11.77 16.07,12.54L12.54,16.07C11.77,15.31 11.61,14.17 12.04,13.24L11.58,12.79L10.41,13.95L8.09,11.62L6.67,13.04L8.79,15.16L6.67,17.28L1,11.62L3.14,9.5L5.26,11.62L6.67,10.21L3.84,7.38C3.06,6.6 3.06,5.33 3.84,4.55L4.55,3.84C5.33,3.06 6.6,3.06 7.38,3.84L10.21,6.67L11.62,5.26L9.5,3.14L11.62,1M18,14A4,4 0 0,1 14,18V16A2,2 0 0,0 16,14H18M22,14A8,8 0 0,1 14,22V20A6,6 0 0,0 20,14H22Z", Ie = "M23,12H17V10L20.39,6H17V4H23V6L19.62,10H23V12M15,16H9V14L12.39,10H9V8H15V10L11.62,14H15V16M7,20H1V18L4.39,14H1V12H7V14L3.62,18H7V20Z";
+var U = "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z", Te = "M8.27,3L3,8.27V15.73L8.27,21H15.73C17.5,19.24 21,15.73 21,15.73V8.27L15.73,3M9.1,5H14.9L19,9.1V14.9L14.9,19H9.1L5,14.9V9.1M11,15H13V17H11V15M11,7H13V13H11V7", Ee = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.67C6,21.4 6.6,22 7.33,22H16.67A1.33,1.33 0 0,0 18,20.67V5.33C18,4.6 17.4,4 16.67,4Z", De = "M16.67,4H15V2H9V4H7.33A1.33,1.33 0 0,0 6,5.33V20.66C6,21.4 6.6,22 7.33,22H16.66C17.4,22 18,21.4 18,20.67V5.33C18,4.6 17.4,4 16.67,4M11,20V14.5H9L13,7V12.5H15", Oe = "M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M3.05,13H1V11H3.05C3.5,6.83 6.83,3.5 11,3.05V1H13V3.05C17.17,3.5 20.5,6.83 20.95,11H23V13H20.95C20.5,17.17 17.17,20.5 13,20.95V23H11V20.95C6.83,20.5 3.5,17.17 3.05,13M12,5A7,7 0 0,0 5,12A7,7 0 0,0 12,19A7,7 0 0,0 19,12A7,7 0 0,0 12,5Z", ke = "M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53C10.44,22.09 7.91,22.09 6.34,20.53L2.81,17C2.03,16.21 2.03,14.95 2.81,14.16L13.41,3.56C14.2,2.78 15.46,2.78 16.24,3.56M4.22,15.58L7.76,19.11C8.54,19.9 9.8,19.9 10.59,19.11L14.12,15.58L9.17,10.63L4.22,15.58Z", Ae = "M17 4H20C21.1 4 22 4.9 22 6V8H20V6H17V4M4 8V6H7V4H4C2.9 4 2 4.9 2 6V8H4M20 16V18H17V20H20C21.1 20 22 19.1 22 18V16H20M7 18H4V16H2V18C2 19.1 2.9 20 4 20H7V18M16 10V14H8V10H16M18 8H6V16H18V8Z", je = "M22.7 14.3L21.7 15.3L19.7 13.3L20.7 12.3C20.8 12.2 20.9 12.1 21.1 12.1C21.2 12.1 21.4 12.2 21.5 12.3L22.8 13.6C22.9 13.8 22.9 14.1 22.7 14.3M13 19.9V22H15.1L21.2 15.9L19.2 13.9L13 19.9M11.21 15.83L9.25 13.47L6.5 17H13.12L15.66 14.55L13.96 12.29L11.21 15.83M11 19.9V19.05L11.05 19H5V5H19V11.31L21 9.38V5C21 3.9 20.11 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.11 3.9 21 5 21H11V19.9Z", Me = "M4,1C2.89,1 2,1.89 2,3V7C2,8.11 2.89,9 4,9H1V11H13V9H10C11.11,9 12,8.11 12,7V3C12,1.89 11.11,1 10,1H4M4,3H10V7H4V3M14,13C12.89,13 12,13.89 12,15V19C12,20.11 12.89,21 14,21H11V23H23V21H20C21.11,21 22,20.11 22,19V15C22,13.89 21.11,13 20,13H14M3.88,13.46L2.46,14.88L4.59,17L2.46,19.12L3.88,20.54L6,18.41L8.12,20.54L9.54,19.12L7.41,17L9.54,14.88L8.12,13.46L6,15.59L3.88,13.46M14,15H20V19H14V15Z", Ne = "M11.62,1L17.28,6.67L15.16,8.79L13.04,6.67L11.62,8.09L13.95,10.41L12.79,11.58L13.24,12.04C14.17,11.61 15.31,11.77 16.07,12.54L12.54,16.07C11.77,15.31 11.61,14.17 12.04,13.24L11.58,12.79L10.41,13.95L8.09,11.62L6.67,13.04L8.79,15.16L6.67,17.28L1,11.62L3.14,9.5L5.26,11.62L6.67,10.21L3.84,7.38C3.06,6.6 3.06,5.33 3.84,4.55L4.55,3.84C5.33,3.06 6.6,3.06 7.38,3.84L10.21,6.67L11.62,5.26L9.5,3.14L11.62,1M18,14A4,4 0 0,1 14,18V16A2,2 0 0,0 16,14H18M22,14A8,8 0 0,1 14,22V20A6,6 0 0,0 20,14H22Z", Pe = "M23,12H17V10L20.39,6H17V4H23V6L19.62,10H23V12M15,16H9V14L12.39,10H9V8H15V10L11.62,14H15V16M7,20H1V18L4.39,14H1V12H7V14L3.62,18H7V20Z";
 //#endregion
 //#region src/feedback.ts
-function H(e) {
+function Fe(e) {
 	if (e && typeof e == "object") {
 		let { x: t, y: n } = e;
 		if (typeof t == "number" && typeof n == "number" && Number.isFinite(t) && Number.isFinite(n)) return [t, n];
 	}
 	return null;
 }
-function U(e) {
+function Ie(e) {
 	if (!Array.isArray(e)) return [];
 	let t = [];
 	for (let n of e) {
-		let e = H(n);
+		let e = Fe(n);
 		e && t.push(e);
 	}
 	return t;
@@ -536,7 +536,7 @@ function Le(e) {
 	}, n = e?.cleanPathProgress;
 	if (!Array.isArray(n)) return t;
 	for (let e of n) {
-		let n = U(e?.path);
+		let n = Ie(e?.path);
 		if (n.length < 2) continue;
 		let r = Number(e.clean_index), i = Number.isFinite(r) ? Math.max(0, Math.min(n.length - 1, Math.floor(r))) : 0;
 		i > 0 && t.visited.push(n.slice(0, i + 1)), i < n.length - 1 && t.remaining.push(n.slice(i));
@@ -545,7 +545,7 @@ function Le(e) {
 }
 function Re(e, t = 0) {
 	if (t > 4 || !e || typeof e != "object") return [];
-	let n = Array.isArray(e) ? U(e) : [];
+	let n = Array.isArray(e) ? Ie(e) : [];
 	for (let r of Object.values(e)) {
 		let e = Re(r, t + 1);
 		e.length > n.length && (n = e);
@@ -553,7 +553,7 @@ function Re(e, t = 0) {
 	return n;
 }
 function ze(e) {
-	return Array.isArray(e) && typeof e[0] == "number" && typeof e[1] == "number" ? [e[0], e[1]] : H(e);
+	return Array.isArray(e) && typeof e[0] == "number" && typeof e[1] == "number" ? [e[0], e[1]] : Fe(e);
 }
 function Be(e) {
 	let t = Array.isArray(e) ? e : e?.points;
@@ -1192,8 +1192,27 @@ var rt = o`
   .dim {
     opacity: 0.25;
   }
-`, it = 2e3;
-function q(e, t) {
+`, q = ["lawn_mower", "device_tracker"];
+function it(e, t) {
+	return e.entities?.[t]?.platform === "yarbo_local";
+}
+function at(e, t) {
+	let n = t.split(".", 1)[0] ?? "";
+	return !q.includes(n) || !it(e, t) ? null : { config: {
+		type: "custom:yarbo-local-card",
+		entity: t
+	} };
+}
+function ot(e) {
+	let t = Object.values(e.entities ?? {}).filter((e) => e.platform === "yarbo_local");
+	for (let e of q) {
+		let n = t.find((t) => t.entity_id.startsWith(`${e}.`));
+		if (n) return n.entity_id;
+	}
+	return t[0]?.entity_id ?? "";
+}
+var st = 2e3;
+function J(e, t) {
 	let n = e.width * (t.h / Math.max(1, t.w));
 	return [
 		e.cx - e.width / 2,
@@ -1202,19 +1221,19 @@ function q(e, t) {
 		n
 	];
 }
-function at(e, t, n = .12) {
+function ct(e, t, n = .12) {
 	let [r, i, a, o] = e, s = Math.max(a - r, 4), c = Math.max(o - i, 4), l = t.w / Math.max(1, t.h), u = Math.max(s, c * l) * (1 + n * 2);
 	return {
 		cx: (r + a) / 2,
 		cy: (i + o) / 2,
-		width: J(u)
+		width: lt(u)
 	};
 }
-function J(e) {
-	return Math.min(it, Math.max(2, e));
+function lt(e) {
+	return Math.min(st, Math.max(2, e));
 }
-function ot(e, t, n) {
-	let r = J(e.width * t), i = r / e.width;
+function ut(e, t, n) {
+	let r = lt(e.width * t), i = r / e.width;
 	return {
 		cx: n[0] + (e.cx - n[0]) * i,
 		cy: n[1] + (e.cy - n[1]) * i,
@@ -1222,7 +1241,7 @@ function ot(e, t, n) {
 	};
 }
 function Y(e, t, n, r) {
-	let [i, a, o, s] = q(e, t);
+	let [i, a, o, s] = J(e, t);
 	return [i + n / Math.max(1, t.w) * o, a + r / Math.max(1, t.h) * s];
 }
 function X(e, t) {
@@ -1230,7 +1249,7 @@ function X(e, t) {
 }
 //#endregion
 //#region src/editor.ts
-var st = [
+var dt = [
 	{
 		name: "entity",
 		required: !0,
@@ -1268,14 +1287,14 @@ var st = [
 			}
 		]
 	}
-], ct = {
+], ft = {
 	entity: "Robot (any Yarbo Local entity)",
 	title: "Title",
 	height: "Map height",
 	trail: "Show trail",
 	follow: "Follow the robot",
 	show_status: "Show status chips"
-}, lt = class extends B {
+}, pt = class extends H {
 	static properties = {
 		hass: { attribute: !1 },
 		_config: { state: !0 }
@@ -1287,8 +1306,8 @@ var st = [
 		return !this.hass || !this._config ? N : A`<ha-form
       .hass=${this.hass}
       .data=${this._config}
-      .schema=${st}
-      .computeLabel=${(e) => ct[e.name] ?? e.name}
+      .schema=${dt}
+      .computeLabel=${(e) => ft[e.name] ?? e.name}
       @value-changed=${this._changed}
     ></ha-form>`;
 	}
@@ -1300,10 +1319,10 @@ var st = [
 		}));
 	}
 };
-customElements.get("yarbo-local-card-editor") || customElements.define("yarbo-local-card-editor", lt);
+customElements.get("yarbo-local-card-editor") || customElements.define("yarbo-local-card-editor", pt);
 //#endregion
 //#region src/yarbo-local-card.ts
-var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox="0 0 24 24" aria-hidden="true"><path d=${e}></path></svg>`, $ = (e) => e.map(([e, t]) => `${-e},${-t}`).join(" "), mt = class extends B {
+var mt = "0.3.1", Z = 440, ht = .55, gt = 6, _t = 14, Q = (e) => j`<svg viewBox="0 0 24 24" aria-hidden="true"><path d=${e}></path></svg>`, $ = (e) => e.map(([e, t]) => `${-e},${-t}`).join(" "), vt = class extends H {
 	static styles = rt;
 	static properties = {
 		hass: { attribute: !1 },
@@ -1359,9 +1378,8 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		return document.createElement("yarbo-local-card-editor");
 	}
 	static getStubConfig(e) {
-		let t = Object.values(e.entities ?? {}).filter((e) => e.platform === "yarbo_local");
 		return {
-			entity: (t.find((e) => e.entity_id.startsWith("device_tracker.")) ?? t[0])?.entity_id ?? "",
+			entity: ot(e),
 			title: "Yarbo"
 		};
 	}
@@ -1466,7 +1484,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 			t[1] - 5,
 			t[0] + 5,
 			t[1] + 5
-		]), this._view = at(n ?? [
+		]), this._view = ct(n ?? [
 			-10,
 			-10,
 			10,
@@ -1494,7 +1512,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		if (!this._view) return;
 		e.preventDefault();
 		let { px: t, py: n } = this._local(e), r = Y(this._view, this._size, t, n);
-		this._view = ot(this._view, Math.exp(e.deltaY * .0015), r);
+		this._view = ut(this._view, Math.exp(e.deltaY * .0015), r);
 	}
 	_onPointerDown(e) {
 		if (!this._view || e.target.closest(".controls, .panel, .info")) return;
@@ -1528,11 +1546,11 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 			y: r
 		}), this._pointers.size >= 2 && t.pinch) {
 			let [e, n] = [...this._pointers.values()], r = Math.hypot(e.x - n.x, e.y - n.y), i = Y(t.view, this._size, (e.x + n.x) / 2, (e.y + n.y) / 2);
-			this._view = ot(t.view, t.pinch / Math.max(1, r), i);
+			this._view = ut(t.view, t.pinch / Math.max(1, r), i);
 			return;
 		}
 		let i = n - t.startX, a = r - t.startY;
-		if (!t.moved && Math.hypot(i, a) < ft) return;
+		if (!t.moved && Math.hypot(i, a) < gt) return;
 		t.moved = !0, this._dragging = !0, this._follow = !1;
 		let o = X(t.view, this._size);
 		this._view = {
@@ -1582,7 +1600,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		};
 		let t = new Image();
 		t.onload = () => {
-			let e = this._view, [n, r, i, a] = q(e, this._size), o = Math.min(i / t.naturalWidth, a / t.naturalHeight), s = {
+			let e = this._view, [n, r, i, a] = J(e, this._size), o = Math.min(i / t.naturalWidth, a / t.naturalHeight), s = {
 				a: o,
 				b: 0,
 				e: n + (i - t.naturalWidth * o) / 2,
@@ -1605,7 +1623,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		}, t.src = e.url;
 	}
 	_snap(e) {
-		let t = this._view ? X(this._view, this._size) : .05, n = e, r = pt * t, i = [];
+		let t = this._view ? X(this._view, this._size) : .05, n = e, r = _t * t, i = [];
 		for (let e of this._map?.zones ?? []) i.push(...e.points.map(([e, t]) => G(e, t)));
 		for (let e of this._map?.docks ?? []) i.push(G(e.point[0], e.point[1]));
 		for (let t of i) {
@@ -1732,16 +1750,16 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		return A`<div class="header">
       <div class="title">${t}</div>
       <div class="chips">
-        ${e && !e.connected ? A`<span class="chip bad">${Q(Pe)}Offline</span>` : N}
+        ${e && !e.connected ? A`<span class="chip bad">${Q(Me)}Offline</span>` : N}
         ${e ? A`<span class="chip ${K(e) ? "bad" : ""}"
-              >${K(e) ? Q(V) : e.awake === !1 ? Q(Ie) : N}${tt(e)}</span
+              >${K(e) ? Q(U) : e.awake === !1 ? Q(Pe) : N}${tt(e)}</span
             >` : N}
-        ${this._obstacleCount() > 0 ? A`<span class="chip warn" title=${this._obstacleTitle()}>${Q(De)}${this._obstacleCount()}</span>` : N}
+        ${this._obstacleCount() > 0 ? A`<span class="chip warn" title=${this._obstacleTitle()}>${Q(Te)}${this._obstacleCount()}</span>` : N}
         ${e?.battery == null ? N : A`<span class="chip ${e.battery < 20 ? "bad" : ""}"
-              >${Q(e.charging ? ke : Oe)}${e.battery}%</span
+              >${Q(e.charging ? De : Ee)}${e.battery}%</span
             >`}
         ${e ? A`<span class="chip ${r.cls}"
-              >${Q(Fe)}${r.label}${e.satellites ? A` · ${e.satellites}` : N}</span
+              >${Q(Ne)}${r.label}${e.satellites ? A` · ${e.satellites}` : N}</span
             >` : N}
       </div>
     </div>`;
@@ -1751,7 +1769,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		if (!e) return N;
 		let t = nt(e, this.hass?.locale?.language);
 		return A`<div class="fault" role="alert">
-      ${Q(V)}
+      ${Q(U)}
       <div class="fault-text">
         <div class="fault-title">${e.description}${t ? A`<span class="fault-detail">${t}</span>` : N}</div>
         <div class="fault-hint">${e.hint}</div>
@@ -1759,7 +1777,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
     </div>`;
 	}
 	_renderSvg() {
-		let e = this._view, t = this._map, [n, r, i, a] = q(e, this._size), o = X(e, this._size), s = this._align, c = s && (s.step === "photo1" || s.step === "photo2");
+		let e = this._view, t = this._map, [n, r, i, a] = J(e, this._size), o = X(e, this._size), s = this._align, c = s && (s.step === "photo1" || s.step === "photo2");
 		return A`<svg viewBox="${n} ${r} ${i} ${a}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of ${t.title}">
       ${this._renderBackground()} ${this._renderGrid(n, r, i, a)}
       <g class=${c ? "dim" : ""}>
@@ -1822,7 +1840,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 	_renderTrail() {
 		return this._config?.trail === !1 ? N : Ze(this._trail).map((e) => {
 			let t = `trail ${e.reverse ? "reverse" : ""} ${e.working ? "" : "thin"}`;
-			return e.working ? j`<polyline class=${t} stroke-width=${dt} points=${$(e.points)}></polyline>` : j`<polyline class=${t} points=${$(e.points)}></polyline>`;
+			return e.working ? j`<polyline class=${t} stroke-width=${ht} points=${$(e.points)}></polyline>` : j`<polyline class=${t} points=${$(e.points)}></polyline>`;
 		});
 	}
 	_renderRobot(e) {
@@ -1857,7 +1875,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
 		let e = !!this.hass?.user?.is_admin;
 		return A`<div class="controls">
       <button class="icon-button" title="Fit the map" aria-label="Fit the map" @click=${() => this._fit()}>
-        ${Q(Me)}
+        ${Q(Ae)}
       </button>
       <button
         class="icon-button ${this._follow ? "active" : ""}"
@@ -1866,10 +1884,10 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
         aria-pressed=${this._follow ? "true" : "false"}
         @click=${() => this._toggleFollow()}
       >
-        ${Q(Ae)}
+        ${Q(Oe)}
       </button>
       ${this._config?.trail === !1 ? N : A`<button class="icon-button" title="Clear the trail" aria-label="Clear the trail" @click=${() => this._trail = []}>
-            ${Q(je)}
+            ${Q(ke)}
           </button>`}
       ${e ? A`<button
             class="icon-button ${this._align ? "active" : ""}"
@@ -1877,7 +1895,7 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
             aria-label="Align an aerial photo"
             @click=${() => this._align ? this._align = void 0 : this._startAlign()}
           >
-            ${Q(Ne)}
+            ${Q(je)}
           </button>` : N}
     </div>`;
 	}
@@ -1985,12 +2003,13 @@ var ut = "0.3.0", Z = 440, dt = .55, ft = 6, pt = 14, Q = (e) => j`<svg viewBox=
     </div>`;
 	}
 };
-customElements.get("yarbo-local-card") || customElements.define("yarbo-local-card", mt), window.customCards = window.customCards ?? [], window.customCards.some((e) => e.type === "yarbo-local-card") || window.customCards.push({
+customElements.get("yarbo-local-card") || customElements.define("yarbo-local-card", vt), window.customCards = window.customCards ?? [], window.customCards.some((e) => e.type === "yarbo-local-card") || window.customCards.push({
 	type: "yarbo-local-card",
 	name: "Yarbo Local",
 	description: "The robot's own map with zones, dock, live position, trail and an optional aerial photo.",
 	preview: !1,
-	documentationURL: "https://github.com/yarbo-local/yarbo-local-card"
-}), console.info(`%c YARBO-LOCAL-CARD %c ${ut} `, "color:#fff;background:#2f8f86;border-radius:3px 0 0 3px", "color:#2f8f86;background:#e8f1f0;border-radius:0 3px 3px 0");
+	documentationURL: "https://github.com/yarbo-local/yarbo-local-card",
+	getEntitySuggestion: at
+}), console.info(`%c YARBO-LOCAL-CARD %c ${mt} `, "color:#fff;background:#2f8f86;border-radius:3px 0 0 3px", "color:#2f8f86;background:#e8f1f0;border-radius:0 3px 3px 0");
 //#endregion
-export { mt as YarboLocalCard };
+export { vt as YarboLocalCard };

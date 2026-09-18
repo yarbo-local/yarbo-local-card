@@ -31,6 +31,7 @@ import {
 } from "./geometry";
 import { faultDetail, faultOf, statusLabel } from "./status";
 import { cardStyles } from "./styles";
+import { defaultEntity, entitySuggestion } from "./suggest";
 import type {
   Background,
   CardConfig,
@@ -45,7 +46,7 @@ import type {
 import { fitView, metresPerPixel, pixelToDisplay, viewBox, zoomAt, type Size, type View } from "./view";
 import "./editor";
 
-const VERSION = "0.3.0";
+const VERSION = "0.3.1";
 const DEFAULT_HEIGHT = 440;
 const CUT_WIDTH_M = 0.55;
 const TAP_SLOP_PX = 6;
@@ -149,9 +150,7 @@ export class YarboLocalCard extends LitElement {
   }
 
   static getStubConfig(hass: HomeAssistant): Partial<CardConfig> {
-    const entities = Object.values(hass.entities ?? {}).filter((e) => e.platform === "yarbo_local");
-    const pick = entities.find((e) => e.entity_id.startsWith("device_tracker.")) ?? entities[0];
-    return { entity: pick?.entity_id ?? "", title: "Yarbo" };
+    return { entity: defaultEntity(hass), title: "Yarbo" };
   }
 
   // -- lifecycle ----------------------------------------------------------------
@@ -930,6 +929,7 @@ if (!window.customCards.some((c) => c.type === "yarbo-local-card")) {
     description: "The robot's own map with zones, dock, live position, trail and an optional aerial photo.",
     preview: false,
     documentationURL: "https://github.com/yarbo-local/yarbo-local-card",
+    getEntitySuggestion: entitySuggestion,
   });
 }
 
