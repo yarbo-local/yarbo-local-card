@@ -85,5 +85,25 @@ describe("obstacle log", () => {
     expect(layer.barriers).toEqual([[[0.73, -27.45], [0.68, -27.53]]]);
     expect(obstacleLayer({ id: "x", ended: 5 }).active).toBe(false);
   });
+
+  it("reads the return route as the robot sends it", () => {
+    // Shape seen on firmware 3.14.11 while returning to the dock: x, y and phi per point.
+    const recharge = {
+      state: 1,
+      runningState: 0,
+      leftTime: 120,
+      totalTime: 160,
+      path: [
+        { x: 1, y: 2, phi: 0.1 },
+        { x: 3, y: 4, phi: 0.2 },
+        { x: 5, y: 6, phi: 0.3 },
+      ],
+    };
+    expect(longestPath(recharge)).toEqual([
+      [1, 2],
+      [3, 4],
+      [5, 6],
+    ]);
+  });
 });
 

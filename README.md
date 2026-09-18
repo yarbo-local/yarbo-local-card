@@ -2,13 +2,16 @@
 
 A Home Assistant dashboard card for Yarbo robots, working with the [Yarbo Local](https://github.com/yarbo-local/yarbo-local-ha) integration. It draws the map stored on the robot, the robot moving on it, and an aerial photo of your property underneath if you give it one. Everything comes from the robot on your LAN through Home Assistant. The card loads no map tiles and talks to nothing on the internet.
 
+![The card showing three zones, the dock, plan progress on the west lawn and the robot heading out](docs/card.png)
+
 ## What it shows
 
 - Work areas, no-go zones, no-vision zones, electronic fences, pathways and memory paths, with names. Tap one for its kind and size.
 - The dock with its approach guard square.
 - The robot's footprint and heading, updated up to twice a second while it is awake, greyed out while it sleeps.
 - A trail of where it has driven since the page opened: thin while travelling, 55 cm wide while working, magenta while reversing.
-- Plan progress, the return-to-dock route and detected obstacles when the robot reports them. These follow formats reverse engineered by other projects and have not yet been checked against a running plan.
+- Plan progress, the return-to-dock route and the obstacles the robot reports, each kept for the run. All three message formats were checked against a real robot mowing and returning to its dock (firmware 3.14.11, Lawn Mower Pro).
+- Faults by name: when the robot stops, the card says why ("Tilted or flipped over"), since when, and what to do, instead of "Error". A paused plan says why it paused.
 - Status: activity, battery, RTK fix and satellites, and an offline warning when Home Assistant loses the robot.
 
 Pan by dragging, zoom with the wheel or a pinch. The buttons fit the map, follow the robot, clear the trail, and, for admins, align an aerial photo.
@@ -41,6 +44,7 @@ show_status: true
 
 ```bash
 npm install
+git config core.hooksPath .githooks   # leak check for demo data, see yarbo-local
 npm run dev     # demo page with a mocked Home Assistant at http://localhost:5174
 npm run check   # typecheck, tests, build
 ```
